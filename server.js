@@ -1,3 +1,5 @@
+const layout = require("./views/layout");
+const db = require("./models");
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
@@ -16,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get("/", async (req, res, next) => {
   try {
-    res.send("hello world!");
+    res.send(layout(""));
   } catch (error) {
     next(error);
   }
@@ -25,6 +27,7 @@ app.get("/", async (req, res, next) => {
 const port = process.env.PORT || 3000;
 const init = async () => {
   try {
+    await db.sync({ force: true });
     app.listen(port, () => console.log(`listening on port ${port}`));
   } catch (error) {
     console.log(error);
